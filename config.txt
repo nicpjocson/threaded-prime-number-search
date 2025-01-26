@@ -1,0 +1,4 @@
+x 4
+y 1000
+print-variation immediate
+task-division-scheme straight
