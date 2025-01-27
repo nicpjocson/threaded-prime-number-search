@@ -75,12 +75,17 @@ public class Main {
                     max = upperLimit;
                 }
 
+                // TODO
+                threads[i].searchInRange(min, max);
             }
 
         // search is linear but the threads are for divisibility testing of individual numbers
         } else if(taskDivisionScheme.equals("linear")) {
             System.out.println(taskDivisionScheme);
             // TODO
+            for(int i = 1; i <= upperLimit; i++) {
+                threads[i].isPrimeNumber(i);
+            }
         }
     }
 }

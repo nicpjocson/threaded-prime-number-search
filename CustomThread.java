@@ -16,11 +16,25 @@ public class CustomThread extends Thread {
 
     public void searchInRange(int min, int max) {
         for(int i = min; i <= max; i++) {
-            // TODO: search
+            isPrimeNumber(i);
         }
     }
 
-    public void testDivisibility(int num) {
+    /*
+     *
+     * prime number definition... :|
+     * 
+     * a whole number greater than 1 
+     * that cannot be exactly divided 
+     * by any whole number other than itself and 1
+     * 
+     */
+    public boolean isPrimeNumber(int num) {
         // TODO
+        for (int i = 2; i <= num / 2; i++)
+            if (num % i == 0)
+                return false;
+
+        return true;
     }
 }
