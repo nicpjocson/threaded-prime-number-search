@@ -15,10 +15,12 @@ public class CustomThread extends Thread {
     }
 
     public void searchInRange(int min, int max) {
-        
+        for(int i = min; i <= max; i++) {
+            // TODO: search
+        }
     }
 
-    public void testDivisibility(int min, int max) {
-        
+    public void testDivisibility(int num) {
+        // TODO
     }
 }
