@@ -59,7 +59,6 @@ public class Main {
         // straight division of search range. (ie for 1 - 1000 and 4 threads the division will be 1-250, 251-500, and so forth)
         if(taskDivisionScheme.equals("straight")) {
             System.out.println(taskDivisionScheme);
-            // TODO
             // equally divide the numbers into the threads
 
             // size of each part
@@ -76,10 +75,6 @@ public class Main {
                     max = upperLimit;
                 }
 
-                System.out.println("min = " + min + ", max = " + max);
-
-            
-            
             }
 
         // search is linear but the threads are for divisibility testing of individual numbers
