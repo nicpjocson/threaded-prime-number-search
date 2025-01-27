@@ -5,7 +5,6 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
         ConfigReader configReader = new ConfigReader();
-
         Map<String, String> configValues = new HashMap<>();
         configValues = configReader.getConfig();
 
@@ -19,13 +18,8 @@ public class Main {
         int noOfThreads = Integer.parseInt(x);
         int upperLimit = Integer.parseInt(y);
 
-        // debug
-        // System.out.println(noOfThreads);
-        // System.out.println(upperLimit);
-
-        CustomThread[] threads = new CustomThread[noOfThreads];
-
         // create x number of threads
+        CustomThread[] threads = new CustomThread[noOfThreads];
         for (int i = 0; i < noOfThreads; i++) {
             threads[i] = new CustomThread(i);
             System.out.println("Thread " + threads[i].getThreadId() + " created.");
@@ -41,13 +35,13 @@ public class Main {
         if(printVariation.equals("immediate")) {
             System.out.println(printVariation);
             // TODO
-            // print results
+            // print thread id and timestamp also
 
         // wait until all threads are done then print everything
         } else if(printVariation.equals("wait")) {
             System.out.println(printVariation);
             // TODO
-            // store results
+            // check if all threads are done
             // print results
         }
 
@@ -87,7 +81,9 @@ public class Main {
             for(int i = 1; i <= upperLimit; i++) {
                 threads[i].isPrimeNumber(i);
             }
-        }
+        }    
+    }
+    
     public static void getTimeNow(String[] args) {
         LocalTime time = LocalTime.now();
         System.out.println("Current Time: " + time);
