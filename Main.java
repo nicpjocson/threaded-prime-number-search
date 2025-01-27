@@ -1,3 +1,4 @@
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,5 +88,8 @@ public class Main {
                 threads[i].isPrimeNumber(i);
             }
         }
+    public static void getTimeNow(String[] args) {
+        LocalTime time = LocalTime.now();
+        System.out.println("Current Time: " + time);
     }
 }
