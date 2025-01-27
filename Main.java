@@ -27,7 +27,7 @@ public class Main {
         // create x number of threads
         for (int i = 0; i < noOfThreads; i++) {
             threads[i] = new CustomThread(i);
-            System.out.println("created thread");
+            System.out.println("Thread " + threads[i].getThreadId() + " created.");
         }
         
         /* 
