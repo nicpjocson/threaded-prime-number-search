@@ -40,11 +40,14 @@ public class Main {
         if(printVariation == "immediate") {
             System.out.println(printVariation);
             // TODO
+            // print results
 
         // wait until all threads are done then print everything
         } else if(printVariation == "wait") {
             System.out.println(printVariation);
             // TODO
+            // store results
+            // print results
         }
 
         /*
@@ -57,6 +60,7 @@ public class Main {
         if(taskDivisionScheme == "straight") {
             System.out.println(taskDivisionScheme);
             // TODO
+            // equally divide the numbers into the threads
 
         // search is linear but the threads are for divisibility testing of individual numbers
         } else if(taskDivisionScheme == "linear") {
