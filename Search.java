@@ -11,4 +11,6 @@ public class Search {
     // public void checkDivisibility() {
 
     // }
+
+    // this.timeCreated = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 }
