@@ -62,6 +62,24 @@ public class Main {
             // TODO
             // equally divide the numbers into the threads
 
+            // size of each part
+            int rangeSize = upperLimit / noOfThreads;
+
+            for (int i = 0; i < noOfThreads; i++) {
+                // current partition min
+                int min = i * rangeSize + 1;
+                // current partition max
+                int max = (i + 1) * rangeSize;
+
+                // ensure the max value is exactly y
+                if (i == noOfThreads - 1) {
+                    max = upperLimit;
+                }
+
+            System.out.println("min = " + min + ", max = " + max);
+            
+            }
+
         // search is linear but the threads are for divisibility testing of individual numbers
         } else if(taskDivisionScheme.equals("linear")) {
             System.out.println(taskDivisionScheme);
