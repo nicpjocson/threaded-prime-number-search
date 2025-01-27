@@ -22,13 +22,14 @@ public class Main {
         // System.out.println(noOfThreads);
         // System.out.println(upperLimit);
 
+        CustomThread[] threads = new CustomThread[noOfThreads];
 
         // create x number of threads
-        for(int i = 0; i < noOfThreads; i++) {
+        for (int i = 0; i < noOfThreads; i++) {
+            threads[i] = new CustomThread(i);
             System.out.println("created thread");
-            // TODO
         }
-
+        
         /* 
          * 
          * Printing Variation
