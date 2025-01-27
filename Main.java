@@ -19,8 +19,9 @@ public class Main {
         int upperLimit = Integer.parseInt(y);
 
         // debug
-        System.out.println(noOfThreads);
-        System.out.println(upperLimit);
+        // System.out.println(noOfThreads);
+        // System.out.println(upperLimit);
+
 
         // create x number of threads
         for(int i = 0; i < noOfThreads; i++) {
