@@ -37,13 +37,13 @@ public class Main {
          */
 
         // print immediately
-        if(printVariation == "immediate") {
+        if(printVariation.equals("immediate")) {
             System.out.println(printVariation);
             // TODO
             // print results
 
         // wait until all threads are done then print everything
-        } else if(printVariation == "wait") {
+        } else if(printVariation.equals("wait")) {
             System.out.println(printVariation);
             // TODO
             // store results
@@ -57,13 +57,13 @@ public class Main {
          */
 
         // straight division of search range. (ie for 1 - 1000 and 4 threads the division will be 1-250, 251-500, and so forth)
-        if(taskDivisionScheme == "straight") {
+        if(taskDivisionScheme.equals("straight")) {
             System.out.println(taskDivisionScheme);
             // TODO
             // equally divide the numbers into the threads
 
         // search is linear but the threads are for divisibility testing of individual numbers
-        } else if(taskDivisionScheme == "linear") {
+        } else if(taskDivisionScheme.equals("linear")) {
             System.out.println(taskDivisionScheme);
             // TODO
         }
