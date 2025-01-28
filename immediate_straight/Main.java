@@ -3,29 +3,51 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main extends Thread {
     public static void main(String[] args) {
+        // get config values
         Map<String, Integer> configValues = new HashMap<>();
         configValues = getConfig();
-
-        // get config values
-        int x = configValues.get("x");
-        int y = configValues.get("y");
+        int noOfThreads = configValues.get("x");
+        int upperLimit = configValues.get("y");
 
         // create x number of threads
-        CustomThread[] threads = new CustomThread[x];
-        for (int i = 0; i < x; i++) {
-            threads[i] = new CustomThread(i);
+        Thread[] threads = new Thread[noOfThreads];
+
+        // equally divide the numbers into the threads
+        int rangeSize = upperLimit / noOfThreads;
+
+        for (int i = 0; i < noOfThreads; i++) {
+            int threadId = i; // for readability
+            // current partition min
+            int min = i * rangeSize + 1;
+            // current partition max
+            int max = (i == noOfThreads - 1) ? upperLimit : (i + 1) * rangeSize;
+
+            final int finalMin = min;
+            final int finalMax = max;
+
+            // create and start the thread
+            threads[i] = new Thread(() -> {
+                for (int num = finalMin; num <= finalMax; num++) {
+                    if (isPrime(num)) {
+                        System.out.println("[" + getTimeNow() + "] Thread " + threadId + " found prime: " + num);
+                    }
+                }
+            });
             threads[i].start();
-            System.out.println("Thread " + threads[i].getThreadId() + " started.");
         }
-        
-        
     }
 
+    /*
+     * 
+     * Config functions
+     * 
+     */
     public static Map<String, Integer> getConfig() {
         String filePath = "config.txt";
         Map<String, Integer> configValues = new HashMap<>();
@@ -57,39 +79,33 @@ public class Main extends Thread {
      * Printing functions
      * 
      */
+    public static String getTimeNow() {
+        // get current time
+        LocalTime time = LocalTime.now();
+        // format time as string
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String strTime = time.format(formatter);
 
-    /*
-     * 
-     * Task Division functions
-     * 
-     */
-    public static void straightTaskDivision(CustomThread[] threads, int upperLimit, int noOfThreads) {
-        int rangeSize = upperLimit / noOfThreads;
-                            
-        // equally divide the numbers into the threads
-        for (int i = 0; i < noOfThreads; i++) {
-            // current partition min
-            int min = i * rangeSize + 1;
-            // current partition max
-            int max = (i + 1) * rangeSize;
-
-            // ensure the max value is exactly y
-            if (i == noOfThreads - 1) {
-                max = upperLimit;
-            }
-
-            // TODO
-            threads[i].searchInRange(min, max);
-        }
+        return strTime;
     }
 
     /*
      * 
-     * Helper functions
+     * Search functions
      * 
      */
-    public static void getTimeNow(String[] args) {
-        LocalTime time = LocalTime.now();
-        System.out.println("Current Time: " + time);
+    // prime number definition... :|
+    //
+    // a whole number greater than 1 
+    // that cannot be exactly divided 
+    // by any whole number other than itself and 1
+    public static boolean isPrime(int num) {
+        if (num == 1) return false;
+        for (int i = 2; i <= num / 2; i++) {
+            if (num % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
