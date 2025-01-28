@@ -11,7 +11,7 @@ public class CustomThread extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Thread ID: " + threadId + " is running.");
+        System.out.println("Thread " + threadId + " is running.");
     }
 
     public void searchInRange(int min, int max) {
@@ -31,10 +31,11 @@ public class CustomThread extends Thread {
      */
     public boolean isPrimeNumber(int num) {
         // TODO
-        for (int i = 2; i <= num / 2; i++)
-            if (num % i == 0)
+        for (int i = 2; i <= num / 2; i++) {
+            if (num % i == 0) {
                 return false;
-
+            }
+        }
         return true;
     }
 }
