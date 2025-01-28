@@ -16,7 +16,9 @@ public class CustomThread extends Thread {
 
     public void searchInRange(int min, int max) {
         for(int i = min; i <= max; i++) {
-            isPrimeNumber(i);
+            if(isPrimeNumber(i)) {
+                System.out.println(i);
+            };
         }
     }
 
