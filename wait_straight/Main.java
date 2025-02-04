@@ -56,6 +56,7 @@ public class Main extends Thread {
             thread.start();
         }
 
+        // wait for all threads
         for (Thread thread : threads) {
             try {
                 thread.join();
@@ -131,6 +132,7 @@ public class Main extends Thread {
     // by any whole number other than itself and 1
     public static boolean isPrime(int n) {
         
+        // eliminate numbers less than or equal to 1
         if (n <= 1) {
             return false;
         }
@@ -139,11 +141,13 @@ public class Main extends Thread {
             return true;
         }
         
-        // check for multiples of 2 and 3
+        // check for divisibility by 2 and 3
         if (n % 2 == 0 || n % 3 == 0) {
             return false;
         }
 
+        // for numbers greater than 3
+        // check divisibility starting from 5
         for (int i = 5; i <= Math.sqrt(n); i = i + 6) {
             if (n % i == 0 || n % (i + 2) == 0) {
                 return false;
