@@ -19,18 +19,13 @@ public class Main extends Thread {
 
         // create list of threads
         List<Thread> threads = new ArrayList<>();
-
-        // store list of prime numbers
-        List<List<Integer>> primeNums = new ArrayList<>();
-        for (int i = 0; i < numThreads; i++) {
-            primeNums.add(new ArrayList<>());
-        }
+        // store list of all prime numbers
+        List<Integer> primeNums = new ArrayList<>();
 
         // equally divide the numbers into the threads
         int rangeSize = upperLimit / numThreads;
 
         for (int i = 0; i < numThreads; i++) {
-            int threadId = i; // for readability
             // current partition min
             int min = i * rangeSize + 1;
             // current partition max
@@ -39,18 +34,19 @@ public class Main extends Thread {
             final int finalMin = min;
             final int finalMax = max;
 
-            // create and start the thread
+            // create and start new thread
             Thread thread = new Thread(() -> {
                 for (int num = finalMin; num <= finalMax; num++) {
                     if (isPrime(num)) {
-                        synchronized (primeNums.get(threadId)) {
-                            primeNums.get(threadId).add(num);
+                        // System.out.println("[" + getTimeNow() + "] Thread " + threadId + " found prime: " + num);
+                        // mutual exclusion
+                        // multiple threads modify primeNums simultaneously
+                        synchronized (primeNums) {
+                            primeNums.add(num);
                         }
-                        // System.out.println("Thread " + threadId + " found prime: " + num + " @" + getTimeNow());
                     }
                 }
-                System.out.println("[Thread " + threadId + "] Found primes: " + primeNums.get(threadId) + "\n");
-                // test
+                // lalala test
                 // synchronized (Main.class) {
                 // System.out.println("[Thread " + threadId + "] Found primes: " + primeNums.get(threadId) + "\n");
                 // }
