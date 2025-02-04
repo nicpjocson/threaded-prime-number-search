@@ -1,13 +1,13 @@
+// config-related
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.HashMap;
+
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Main extends Thread {
     public static void main(String[] args) {
@@ -102,21 +102,6 @@ public class Main extends Thread {
         // System.out.println("y = " + y);
     
         return configValues;
-    }
-
-    /*
-     * 
-     * Printing functions
-     * 
-     */
-    public static String getTimeNow() {
-        // get current time
-        LocalTime time = LocalTime.now();
-        // format time as string
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String strTime = time.format(formatter);
-
-        return strTime;
     }
 
     /*
