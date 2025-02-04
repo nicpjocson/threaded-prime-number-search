@@ -26,7 +26,7 @@ public class Main extends Thread {
 
         // initialize map with numbers, prime status, and max divisor (sqrt of number)
         for (int num = 1; num <= upperLimit; num++) {
-            numberMap.put(num, new Prime(null, (int) Math.sqrt(num)));
+            numberMap.put(num, new Prime(null, 1, (int) Math.sqrt(num)));
         }
 
         // rules??
@@ -37,21 +37,21 @@ public class Main extends Thread {
 
         // 
 
-        for (int i = 0; i < noOfThreads; i++) {
-            // Prime status = numberMap.get(num);
+        // for (int i = 1; i <= upperLimit; i++) {
+        //     Prime num = numberMap.get(i);
 
-            // not done checking divisibility for a number
-            // if (num.isPrime == null && num.currDivisibility < num.maxDivisibility) {
-            //     // thread
-            //     // checkDivisibility(num, currDivisibility)
-            //     // currDiv++
-            // }
+        //     // not done checking divisibility for a number
+        //     if (num.isPrime == null && num.currDivisibility < num.maxDivisibility) {
+        //         // whichever thread is not busy???
+        //             // checkDivisibility(num, currDivisibility)
+        //             // currDiv++
+        //     }
 
-            // done checking divisibility for a number
-            // if (num.isPrime == null && currDiv == num.maxDivisibility) {
-            //     num.isPrime = false;
-            // }
-        }
+        //     // done checking divisibility for a number
+        //     if (num.isPrime == null && num.currDivisibility == num.maxDivisibility) {
+        //         num.isPrime = false;
+        //     }
+        // }
     }
 
     /*
