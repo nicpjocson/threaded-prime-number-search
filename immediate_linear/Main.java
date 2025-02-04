@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class Main extends Thread {
+public class Main {
     public static void main(String[] args) {
         // get config values
         Map<String, Integer> configValues = new HashMap<>();
@@ -20,14 +20,7 @@ public class Main extends Thread {
         // create x number of threads
         Thread[] threads = new Thread[noOfThreads];
 
-        // crate hashmap of the numbers to check
-        // with info if its prime and the max divisor for checking divisibility (sqrt of the number)
-        Map<Integer, Prime> numberMap = new HashMap<>();
-
-        // initialize map with numbers, prime status, and max divisor (sqrt of number)
-        for (int num = 1; num <= upperLimit; num++) {
-            numberMap.put(num, new Prime(null, 1, (int) Math.sqrt(num)));
-        }
+        // wah
 
         // rules??
 
@@ -36,22 +29,6 @@ public class Main extends Thread {
         // once a number is prime do not check anymore
 
         // 
-
-        // for (int i = 1; i <= upperLimit; i++) {
-        //     Prime num = numberMap.get(i);
-
-        //     // not done checking divisibility for a number
-        //     if (num.isPrime == null && num.currDivisibility < num.maxDivisibility) {
-        //         // whichever thread is not busy???
-        //             // checkDivisibility(num, currDivisibility)
-        //             // currDiv++
-        //     }
-
-        //     // done checking divisibility for a number
-        //     if (num.isPrime == null && num.currDivisibility == num.maxDivisibility) {
-        //         num.isPrime = false;
-        //     }
-        // }
     }
 
     /*
@@ -110,28 +87,12 @@ public class Main extends Thread {
      * Search functions
      * 
      */
-    public static boolean checkDivisibility (int dividend, int divisor) {
-        if (dividend % divisor != 0) {
-            return false;
-        }
-
-        return true;
-    }
+    //
     
     /*
      * 
      * Misc
      * 
      */
-    static class Prime {
-        Boolean isPrime; // tracks if number is prime
-        int currDivisibility; // counter from 1 to maxDivisibility, increments by 1
-        int maxDivisibility; // tracks the max divisor (square root of the number)
-
-        Prime(Boolean isPrime, int currDivisibility, int maxDivisibility) {
-            this.isPrime = isPrime;
-            this.currDivisibility = currDivisibility;
-            this.maxDivisibility = maxDivisibility;
-        }
-    }
+    //
 }
