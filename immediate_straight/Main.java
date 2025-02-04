@@ -104,13 +104,27 @@ public class Main extends Thread {
     // a whole number greater than 1 
     // that cannot be exactly divided 
     // by any whole number other than itself and 1
-    public static boolean isPrime(int num) {
-        if (num == 1) return false;
-        for (int i = 2; i <= num / 2; i++) {
-            if (num % i == 0) {
+    public static boolean isPrime(int n) {
+        
+        if (n <= 1) {
+            return false;
+        }
+
+        if (n == 2 || n == 3) {
+            return true;
+        }
+        
+        // check for multiples of 2 and 3
+        if (n % 2 == 0 || n % 3 == 0) {
+            return false;
+        }
+
+        for (int i = 5; i <= Math.sqrt(n); i = i + 6) {
+            if (n % i == 0 || n % (i + 2) == 0) {
                 return false;
             }
         }
+        
         return true;
     }
 }
