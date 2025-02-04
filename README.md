@@ -17,7 +17,7 @@ The different program variations are split into 4 folders in the repository:
 3. `wait_linear`  
 4. `wait_straight`  
   
-Inside each folder is its corresponding (1) `Main.java` program and (2) `config.txt` file.
+Inside each folder is its corresponding (1) `Main.java` program, (2) `config.txt` file, and (3) demo video.
 
 ## `config.txt` parameters  
 `x` - number of threads  
