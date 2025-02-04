@@ -76,26 +76,31 @@ public class Main extends Thread {
     public static Map<String, Integer> getConfig() {
         String filePath = "config.txt";
         Map<String, Integer> configValues = new HashMap<>();
-
+    
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(" ");
                 if (parts.length == 2) {
-                    configValues.put(parts[0], Integer.parseInt(parts[1]));
+                    try {
+                        configValues.put(parts[0], Integer.parseInt(parts[1]));
+                    } catch (NumberFormatException e) {
+                        System.err.println("Error in `config.txt`: '" + parts[1] + "' is not a valid integer.");
+                    }
+                } else {
+                    System.err.println("Error in `config.txt`: Missing '" + line + "'");
                 }
             }
-        } catch (IOException | NumberFormatException e) {
-            System.err.println("Error reading config file: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error reading `config.txt`: " + e.getMessage());
         }
 
-        // debugging
         // int x = configValues.get("x");
         // int y = configValues.get("y");
         
         // System.out.println("x = " + x);
         // System.out.println("y = " + y);
-
+    
         return configValues;
     }
 
