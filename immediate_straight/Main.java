@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.HashMap;
 
 // timestamp
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+// import java.time.LocalTime;
+// import java.time.format.DateTimeFormatter;
 
 public class Main extends Thread {
     public static void main(String[] args) {
@@ -107,13 +109,10 @@ public class Main extends Thread {
      * 
      */
     public static String getTimeNow() {
-        // get current time
-        LocalTime time = LocalTime.now();
-        // format time as string
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String strTime = time.format(formatter);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date now = new Date();
 
-        return strTime;
+        return formatter.format(now);
     }
 
     /*
