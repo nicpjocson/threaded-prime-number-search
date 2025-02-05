@@ -4,24 +4,20 @@ import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
-import java.util.Map;
-import java.util.HashMap;
 // import java.util.List;
 // import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 // timestamp
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 
 public class Main extends Thread {
     public static void main(String[] args) {
         // get config values
         Map<String, Integer> configValues = new HashMap<>();
         configValues = getConfig();
-        int numThreads = configValues.get("x"); // NOTE" NOT USED
+        int numThreads = configValues.get("x");
         int upperLimit = configValues.get("y");
 
         // create list of threads
@@ -29,99 +25,51 @@ public class Main extends Thread {
         // TESTING
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
-        // // crate hashmap of the numbers to check
-        // // with info if its prime and the max divisor for checking divisibility (sqrt of the number)
-        // Map<Integer, MyNumber> numberMap = new HashMap<>();
-
-        // // initialize map with numbers, prime status, and max divisor (sqrt of number)
-        // for (int num = 1; num <= upperLimit; num++) {
-        //     numberMap.put(num, new MyNumber(null, 2, (int) Math.sqrt(num)));
-        // }
-
         // hashmap storing the numbers and if they are prime
         Map<Integer, Boolean> numberMap = new HashMap<>();
+
+        // initially set all numbers as prime
+        for (int i = 1; i <= upperLimit; i++) {
+            numberMap.put(i, true);
+        }
 
         // for each number, check if prime
         for (int i = 1; i <= upperLimit; i++) {
             // get current number and its status
             int currNumber = i;
-            Boolean isPrime = numberMap.get(currNumber);
 
+            // set numbers 1 or less as not prime
             if (currNumber <= 1) {
+                numberMap.put(currNumber, false);
                 continue;
             }
 
-            // // DETERMINED if prime/composite
-            // if (isPrime != null) {
-            //     continue;
-            // }
+            // check current number's divisibility until its square root
+            for (int j = 2; j <= Math.sqrt(currNumber); j++) {
+                int currDivisor = j;
 
-            for (int divisor = 2; divisor <= Math.sqrt(currNumber); divisor++) {
-                int currDivisor = divisor;
+                if (!numberMap.get(currNumber)) {
+                    break;
+                }
                 
                 executor.submit(() -> {
-                    if (checkDivisibility(currNumber, currDivisor)) {
-                        // set number as not prime or composite
+                    // if current number is divisible by at least one divisor then its composite
+                    if (currNumber % currDivisor == 0) {
+                        // set number as not prime
                         synchronized (numberMap) {
                             numberMap.put(currNumber, false);
                         }
                     }
                 });
             }
+
+            if (numberMap.get(currNumber)) {
+                System.out.println("[" + getTimeNow() + "] found prime: " + currNumber);
+                // Thread " + thread + " 
+            }
         }
-
-            // // UNDETERMINED if prime/composite
-            // // but DONE checking divisibility for current number
-            // if (num.isPrime == null && num.currDivisor > num.maxDivisor) {
-            //     // then set isPrime to TRUE
-            //     num.isPrime = true;
-            // }
-
-            // // UNDETERMINED if prime/composite
-            // // and NOT DONE checking divisibility for current number
-            // if (num.isPrime == null && num.currDivisor < num.maxDivisor) {
-            //     // use a thread to check for its
-            //     Thread thread = new Thread(() -> {
-            //         checkDivisibility(currNumber, num.currDivisor);
-            //         num.currDivisor++;
-            //     });
-            //     threads.add(thread);
-            //     thread.start();
-
-            //     // if returns true
-            //     // set isPrime = true;
-
-            //     // if returns false
-            //     // check divisibilty of 
-            // }
-
-            // executor.submit(() -> {
-            //     // Check divisibility
-            //     if (currNumber % num.currDivisor == 0) {
-            //         synchronized (lock) {
-            //             // If divisible, mark as composite
-            //             if (num.isPrime == null) {
-            //                 num.isPrime = false;
-            //             }
-            //         }
-            //     }
-            // });
-
-            // executor.submit(() -> {
-            //     while (num.currDivisor <= num.maxDivisor && num.isPrime == null) {
-            //         if (currNumber % num.currDivisor == 0) {
-            //             num.isPrime = false;
-            //             break;
-            //         }
-            //         num.currDivisor++;
-            //     }
-            //     if (num.currDivisor > num.maxDivisor) {
-            //         num.isPrime = true;
-            //     }
-            // });
-
-        // // Shutdown the executor
-        // executor.shutdown();
+        
+        executor.shutdown();
     }
 
     /*
@@ -166,13 +114,10 @@ public class Main extends Thread {
      * 
      */
     public static String getTimeNow() {
-        // get current time
-        LocalTime time = LocalTime.now();
-        // format time as string
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String strTime = time.format(formatter);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date now = new Date();
 
-        return strTime;
+        return formatter.format(now);
     }
 
     /*
@@ -180,13 +125,13 @@ public class Main extends Thread {
      * Search functions
      * 
      */
-    public static boolean checkDivisibility (int dividend, int divisor) {
-        if (dividend % divisor != 0) {
-            return false;
-        }
+    // public static boolean isDivisible (int dividend, int divisor) {
+    //     if (dividend % divisor != 0) {
+    //         return false;
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
     
     /*
      * 
