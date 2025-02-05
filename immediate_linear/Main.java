@@ -158,15 +158,5 @@ public class Main extends Thread {
      * Misc
      * 
      */
-    // static class MyNumber {
-    //     Boolean isPrime; // tracks if number is prime
-    //     int currDivisor;
-    //     int maxDivisor; // tracks the max divisor (square root of the number)
-
-    //     MyNumber(Boolean isPrime, int currDivisor, int maxDivisor) {
-    //         this.isPrime = isPrime;
-    //         this.currDivisor = currDivisor;
-    //         this.maxDivisor = maxDivisor;
-    //     }
-    // }
+    //
 }
