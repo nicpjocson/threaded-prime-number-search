@@ -88,23 +88,43 @@ public class Main extends Thread {
                 if (parts.length == 2) {
                     try {
                         configValues.put(parts[0], Integer.parseInt(parts[1]));
+                    // NON-INTEGER PARAMETER
                     } catch (NumberFormatException e) {
                         System.err.println("Error in `config.txt`: '" + parts[1] + "' is not a valid integer.");
                     }
+                // NO PARAMETER
                 } else {
                     System.err.println("Error in `config.txt`: Missing '" + line + "'");
                 }
             }
+        // OTHER
         } catch (IOException e) {
             System.err.println("Error reading `config.txt`: " + e.getMessage());
         }
 
-        // int x = configValues.get("x");
-        // int y = configValues.get("y");
-        
+        // INPUT VALIDATION
+        if (!configValues.containsKey("x") || !configValues.containsKey("y")) {
+            System.err.println("Error: `config.txt` must define both 'x' and 'y' values.");
+            System.exit(1); // exit the program if x or y is missing
+        }
+
+        int x = configValues.get("x");
+        int y = configValues.get("y");
         // System.out.println("x = " + x);
         // System.out.println("y = " + y);
-    
+
+        // VALIDATION: x < y
+        if (x >= y) {
+            System.err.println("Error reading `config.txt`: Value of 'x' must be less than or equal to 'y'. x = " + x + ", y = " + y);
+            System.exit(1); // exit if the condition not met
+        }
+
+        // VALIDATION: x >= 1
+        if (x < 1) {
+            System.err.println("Error reading `config.txt`: Value of 'x' must be at least 1. x = " + x);
+            System.exit(1); // exit if the condition not met
+        }
+
         return configValues;
     }
 
