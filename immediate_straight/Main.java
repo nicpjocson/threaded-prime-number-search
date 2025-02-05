@@ -16,21 +16,21 @@ public class Main extends Thread {
         // get config values
         Map<String, Integer> configValues = new HashMap<>();
         configValues = getConfig();
-        int noOfThreads = configValues.get("x");
+        int numThreads = configValues.get("x");
         int upperLimit = configValues.get("y");
 
         // create x number of threads
-        Thread[] threads = new Thread[noOfThreads];
+        Thread[] threads = new Thread[numThreads];
 
         // equally divide the numbers into the threads
-        int rangeSize = upperLimit / noOfThreads;
+        int rangeSize = upperLimit / numThreads;
 
-        for (int i = 0; i < noOfThreads; i++) {
+        for (int i = 0; i < numThreads; i++) {
             int threadId = i; // for readability
             // current partition min
             int min = i * rangeSize + 1;
             // current partition max
-            int max = (i == noOfThreads - 1) ? upperLimit : (i + 1) * rangeSize;
+            int max = (i == numThreads - 1) ? upperLimit : (i + 1) * rangeSize;
 
             final int finalMin = min;
             final int finalMax = max;
