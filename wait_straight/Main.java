@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
+// timestamp
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Main extends Thread {
     public static void main(String[] args) {
         // get config values
@@ -24,6 +28,8 @@ public class Main extends Thread {
 
         // equally divide the numbers into the threads
         int rangeSize = upperLimit / numThreads;
+
+        System.out.println("STARTED AT: " + getTimeNow() + "\n");
 
         for (int i = 0; i < numThreads; i++) {
             // current partition min
@@ -66,6 +72,8 @@ public class Main extends Thread {
 
         Collections.sort(primeNums);
         System.out.println("Found prime numbers: " + primeNums + "\n");
+    
+        System.out.println("ENDED AT: " + getTimeNow());
     }
 
     /*
@@ -122,6 +130,18 @@ public class Main extends Thread {
         }
 
         return configValues;
+    }
+
+    /*
+     * 
+     * Printing functions
+     * 
+     */
+    public static String getTimeNow() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date now = new Date();
+
+        return formatter.format(now);
     }
 
     /*
