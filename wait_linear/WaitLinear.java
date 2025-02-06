@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class Main extends Thread {
+public class WaitLinear extends Thread {
     public static void main(String[] args) {
         // get config values
         Map<String, Integer> configValues = new HashMap<>();
