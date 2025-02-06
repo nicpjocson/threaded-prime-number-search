@@ -23,7 +23,7 @@ The different program variations are split into 4 folders in the repository:
     - **Waits for all threads** to finish before printing primes, using **straight** task division.  
   
 Each folder contains:  
-- The corresponding Java program.  
+- A Java program.  
 - A `config.txt` file for configuration.  
 - A demo video.  
 
@@ -33,7 +33,7 @@ Each folder contains:
 
 ## Compilation and Execution Instructions using Command-line interface (CLI)  
 1. Open a terminal or command prompt.  
-2. Navigate to the project folder.  
+2. Navigate to the project folder:  
 ```
 cd <program_variation_folder>
 ```
