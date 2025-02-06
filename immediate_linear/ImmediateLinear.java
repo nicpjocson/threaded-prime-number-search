@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 // import java.util.List;
 // import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -20,9 +21,6 @@ public class ImmediateLinear extends Thread {
         int numThreads = configValues.get("x");
         int upperLimit = configValues.get("y");
 
-        // create list of threads
-        // List<Thread> threads = new ArrayList<>();
-        // TESTING
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
         // hashmap storing the numbers and if they are prime
@@ -40,33 +38,58 @@ public class ImmediateLinear extends Thread {
 
             // set numbers 1 or less as not prime
             if (currNumber <= 1) {
-                numberMap.put(currNumber, false);
+                // synchronized (numberMap) {
+                    numberMap.put(currNumber, false);
+                // }
                 continue;
             }
+
+            // create list of callables (1 callable = 1 divisor)
+            List<Callable<Void>> divisibilityTasks = new ArrayList<>();
 
             // check current number's divisibility until its square root
             for (int j = 2; j <= Math.sqrt(currNumber); j++) {
                 int currDivisor = j;
 
-                if (!numberMap.get(currNumber)) {
-                    break;
-                }
-                
-                executor.submit(() -> {
-                    // if current number is divisible by at least one divisor then its composite
+                // do thread task
+                divisibilityTasks.add(() -> {
+                    // if the number is divisible
                     if (currNumber % currDivisor == 0) {
-                        // set number as not prime
-                        synchronized (numberMap) {
-                            numberMap.put(currNumber, false);
-                        }
+                        // mark number as not prime / composite
+                        numberMap.put(currNumber, false);
                     }
+                    return null;
                 });
+
+                // // stop checking divisibility if current number is composite
+                // if (!numberMap.get(currNumber)) {
+                //     break;
+                // }
+                
+                // executor.submit(() -> {
+                //     synchronized (numberMap) {
+                //         // if current number is divisible by at least one divisor then its composite
+                //         if (currNumber % currDivisor == 0) {
+                //             // set number as not prime
+                //             numberMap.put(currNumber, false);
+                //         }
+                //     }
+                // });
             }
 
+            try {
+                executor.invokeAll(divisibilityTasks);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+
+            // synchronized (numberMap) {
             if (numberMap.get(currNumber)) {
                 System.out.println("[" + getTimeNow() + "] found prime: " + currNumber);
                 // Thread " + thread + " 
             }
+            // }
         }
         
         executor.shutdown();
