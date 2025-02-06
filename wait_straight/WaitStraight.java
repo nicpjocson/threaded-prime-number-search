@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Main extends Thread {
+public class WaitStraight extends Thread {
     public static void main(String[] args) {
         // get config values
         Map<String, Integer> configValues = new HashMap<>();
@@ -44,7 +44,6 @@ public class Main extends Thread {
             Thread thread = new Thread(() -> {
                 for (int num = finalMin; num <= finalMax; num++) {
                     if (isPrime(num)) {
-                        // System.out.println("[" + getTimeNow() + "] Thread " + threadId + " found prime: " + num);
                         // mutual exclusion
                         // multiple threads modify primeNums simultaneously
                         synchronized (primeNums) {
@@ -52,10 +51,6 @@ public class Main extends Thread {
                         }
                     }
                 }
-                // lalala test
-                // synchronized (Main.class) {
-                // System.out.println("[Thread " + threadId + "] Found primes: " + primeNums.get(threadId) + "\n");
-                // }
             });
             threads.add(thread);
             thread.start();
@@ -104,12 +99,6 @@ public class Main extends Thread {
         // OTHER
         } catch (IOException e) {
             System.err.println("Error reading `config.txt`: " + e.getMessage());
-        }
-
-        // INPUT VALIDATION
-        if (!configValues.containsKey("x") || !configValues.containsKey("y")) {
-            System.err.println("Error: `config.txt` must define both 'x' and 'y' values.");
-            System.exit(1); // exit the program if x or y is missing
         }
 
         int x = configValues.get("x");
