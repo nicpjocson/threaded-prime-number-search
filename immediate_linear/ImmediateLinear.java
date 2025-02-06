@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
+// import java.util.concurrent.ConcurrentHashMap;
+
 // timestamp
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ImmediateLinear extends Thread {
     public static void main(String[] args) {
@@ -23,8 +25,8 @@ public class ImmediateLinear extends Thread {
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
         // hashmap storing the numbers and if they are prime
-        // Map<Integer, Boolean> primeMap = new HashMap<>();
-        Map<Integer, Boolean> primeMap = new ConcurrentHashMap<>();
+        Map<Integer, Boolean> primeMap = new HashMap<>();
+        // Map<Integer, Boolean> primeMap = new ConcurrentHashMap<>();
 
 
          // map for storing thread ids associated with each number
@@ -51,6 +53,19 @@ public class ImmediateLinear extends Thread {
             // create list of callables (1 callable = 1 divisor)
             List<Callable<Void>> divisibilityTasks = new ArrayList<>();
 
+            // handling 2 and 3
+            // bc 2 and 3 do not enter the for loop below vv
+            if (currNumber == 2 || currNumber == 3) {
+                divisibilityTasks.add(() -> {
+                    Thread currentThread = Thread.currentThread();
+
+                    synchronized (threadMap) {
+                        threadMap.put(currNumber, currentThread.getId());
+                    }
+                    return null;
+                });
+            }
+
             // check current number's divisibility until its square root
             for (int j = 2; j <= Math.sqrt(currNumber); j++) {
                 int currDivisor = j;
@@ -68,18 +83,9 @@ public class ImmediateLinear extends Thread {
                     }
 
                     synchronized (threadMap) {
+                        // NOTE: https://stackoverflow.com/questions/1262051/should-java-thread-ids-always-start-at-0
                         threadMap.put(currNumber, currentThread.getId());
-                        System.out.println(currNumber);
-                        System.out.println(currentThread.getId());
                     }
-
-                    // // set last thread to be printed (only when divisibility loop is complete)
-                    // if (currDivisor == Math.sqrt(currNumber)) {
-                    //     synchronized (threadMap) {
-                    //         // NOTE: https://stackoverflow.com/questions/1262051/should-java-thread-ids-always-start-at-0
-                    //         threadMap.put(currNumber, currentThread.getId());
-                    //     }
-                    // }
 
                     return null;
                 });
