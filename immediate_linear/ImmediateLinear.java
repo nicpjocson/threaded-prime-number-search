@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 // timestamp
 import java.text.SimpleDateFormat;
 
-public class Main extends Thread {
+public class ImmediateLinear extends Thread {
     public static void main(String[] args) {
         // get config values
         Map<String, Integer> configValues = new HashMap<>();
