@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Callable;
-// import java.util.concurrent.ConcurrentHashMap;
 
 // timestamp
 import java.text.SimpleDateFormat;
@@ -26,11 +25,9 @@ public class ImmediateLinear extends Thread {
 
         // hashmap storing the numbers and if they are prime
         Map<Integer, Boolean> primeMap = new HashMap<>();
-        // Map<Integer, Boolean> primeMap = new ConcurrentHashMap<>();
 
-
-         // map for storing thread ids associated with each number
-         Map<Integer, Long> threadMap = new HashMap<>();
+        // map for storing thread ids associated with each number
+        Map<Integer, Long> threadMap = new HashMap<>();
 
         // initially set all numbers as prime
         for (int i = 1; i <= upperLimit; i++) {
@@ -92,6 +89,7 @@ public class ImmediateLinear extends Thread {
             }
 
             try {
+                // NOTE: cannot make divisibilityTasks Runnable bc of this
                 executor.invokeAll(divisibilityTasks);
             } catch (InterruptedException e) {
                 e.printStackTrace();
