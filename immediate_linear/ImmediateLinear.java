@@ -4,12 +4,11 @@ import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.concurrent.Callable;
-// import java.util.List;
-// import java.util.ArrayList;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 // timestamp
 import java.text.SimpleDateFormat;
 
@@ -24,11 +23,16 @@ public class ImmediateLinear extends Thread {
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
         // hashmap storing the numbers and if they are prime
-        Map<Integer, Boolean> numberMap = new HashMap<>();
+        // Map<Integer, Boolean> primeMap = new HashMap<>();
+        Map<Integer, Boolean> primeMap = new ConcurrentHashMap<>();
+
+
+         // map for storing thread ids associated with each number
+         Map<Integer, Long> threadMap = new HashMap<>();
 
         // initially set all numbers as prime
         for (int i = 1; i <= upperLimit; i++) {
-            numberMap.put(i, true);
+            primeMap.put(i, true);
         }
 
         // for each number, check if prime
@@ -38,8 +42,8 @@ public class ImmediateLinear extends Thread {
 
             // set numbers 1 or less as not prime
             if (currNumber <= 1) {
-                // synchronized (numberMap) {
-                    numberMap.put(currNumber, false);
+                // synchronized (primeMap) {
+                primeMap.put(currNumber, false);
                 // }
                 continue;
             }
@@ -53,28 +57,32 @@ public class ImmediateLinear extends Thread {
 
                 // do thread task
                 divisibilityTasks.add(() -> {
+                    Thread currentThread = Thread.currentThread();
+
                     // if the number is divisible
                     if (currNumber % currDivisor == 0) {
                         // mark number as not prime / composite
-                        numberMap.put(currNumber, false);
+                        synchronized (primeMap) {
+                            primeMap.put(currNumber, false);
+                        }
                     }
+
+                    synchronized (threadMap) {
+                        threadMap.put(currNumber, currentThread.getId());
+                        System.out.println(currNumber);
+                        System.out.println(currentThread.getId());
+                    }
+
+                    // // set last thread to be printed (only when divisibility loop is complete)
+                    // if (currDivisor == Math.sqrt(currNumber)) {
+                    //     synchronized (threadMap) {
+                    //         // NOTE: https://stackoverflow.com/questions/1262051/should-java-thread-ids-always-start-at-0
+                    //         threadMap.put(currNumber, currentThread.getId());
+                    //     }
+                    // }
+
                     return null;
                 });
-
-                // // stop checking divisibility if current number is composite
-                // if (!numberMap.get(currNumber)) {
-                //     break;
-                // }
-                
-                // executor.submit(() -> {
-                //     synchronized (numberMap) {
-                //         // if current number is divisible by at least one divisor then its composite
-                //         if (currNumber % currDivisor == 0) {
-                //             // set number as not prime
-                //             numberMap.put(currNumber, false);
-                //         }
-                //     }
-                // });
             }
 
             try {
@@ -84,10 +92,9 @@ public class ImmediateLinear extends Thread {
                 Thread.currentThread().interrupt();
             }
 
-            // synchronized (numberMap) {
-            if (numberMap.get(currNumber)) {
-                System.out.println("[" + getTimeNow() + "] found prime: " + currNumber);
-                // Thread " + thread + " 
+            // synchronized (primeMap) {
+            if (primeMap.get(currNumber)) {
+                System.out.println("[" + getTimeNow() + "] Thread " + threadMap.get(currNumber) + " found prime: " + currNumber); // ERROR HERE
             }
             // }
         }
@@ -159,24 +166,4 @@ public class ImmediateLinear extends Thread {
 
         return formatter.format(now);
     }
-
-    /*
-     * 
-     * Search functions
-     * 
-     */
-    // public static boolean isDivisible (int dividend, int divisor) {
-    //     if (dividend % divisor != 0) {
-    //         return false;
-    //     }
-
-    //     return true;
-    // }
-    
-    /*
-     * 
-     * Misc
-     * 
-     */
-    //
 }
