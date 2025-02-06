@@ -1,61 +1,121 @@
+import java.util.*;
+
 // config-related
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Map;
-import java.util.HashMap;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 // timestamp
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 
 public class WaitLinear extends Thread {
     public static void main(String[] args) {
         // get config values
         Map<String, Integer> configValues = new HashMap<>();
         configValues = getConfig();
-        int noOfThreads = configValues.get("x");
+        int numThreads = configValues.get("x");
         int upperLimit = configValues.get("y");
 
-        // create x number of threads
-        Thread[] threads = new Thread[noOfThreads];
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
-        // crate hashmap of the numbers to check
-        // with info if its prime and the max divisor for checking divisibility (sqrt of the number)
-        Map<Integer, Prime> numberMap = new HashMap<>();
+        // hashmap storing the numbers and if they are prime
+        Map<Integer, Boolean> primeMap = new HashMap<>();
 
-        // initialize map with numbers, prime status, and max divisor (sqrt of number)
-        for (int num = 1; num <= upperLimit; num++) {
-            numberMap.put(num, new Prime(null, (int) Math.sqrt(num)));
+        // map for storing thread ids associated with each number
+        Map<Integer, Long> threadMap = new HashMap<>();
+
+        // TEST
+        List<Thread> threadList = new ArrayList<>();
+
+        // initially set all numbers as prime
+        for (int i = 1; i <= upperLimit; i++) {
+            primeMap.put(i, true);
         }
 
-        // rules??
+        System.out.println("STARTED AT: " + getTimeNow() + "\n");
 
-        // for each number only check until its sqrt
+        // for each number, check if prime
+        for (int i = 1; i <= upperLimit; i++) {
+            // get current number and its status
+            int currNumber = i;
 
-        // once a number is prime do not check anymore
+            // set numbers 1 or less as not prime
+            if (currNumber <= 1) {
+                // synchronized (primeMap) {
+                primeMap.put(currNumber, false);
+                // }
+                continue;
+            }
 
-        // 
+            // create list of callables (1 callable = 1 divisor)
+            List<Runnable> divisibilityTasks = new ArrayList<>();
 
-        for (int i = 0; i < noOfThreads; i++) {
-            // Prime status = numberMap.get(num);
+            // handling 2 and 3
+            // bc 2 and 3 do not enter the for loop below vv
+            if (currNumber == 2 || currNumber == 3) {
+                divisibilityTasks.add(() -> {
+                    Thread currentThread = Thread.currentThread();
 
-            // not done checking divisibility for a number
-            // if (num.isPrime == null && currDiv?? < maxDiv) {
-            //    // lalala
-            // }
+                    synchronized (threadMap) {
+                        threadMap.put(currNumber, currentThread.getId());
+                    }
+                });
+            }
 
-            // done checking divisibility for a number
-            // if (num.isPrime == null && currDiv == maxDiv) {
-            //     num.isPrime = false;
-            // }
-        }
+            // check current number's divisibility until its square root
+            for (int j = 2; j <= Math.sqrt(currNumber); j++) {
+                int currDivisor = j;
 
-        for (int num = 1; num <= upperLimit; num++) {
-            if (numberMap.get(num).isPrime == true) {
-                
+                // do thread task
+                divisibilityTasks.add(() -> {
+                    Thread currentThread = Thread.currentThread();
+
+                    // if the number is divisible
+                    if (currNumber % currDivisor == 0) {
+                        // mark number as not prime / composite
+                        synchronized (primeMap) {
+                            primeMap.put(currNumber, false);
+                        }
+                    }
+
+                    synchronized (threadMap) {
+                        // NOTE: https://stackoverflow.com/questions/1262051/should-java-thread-ids-always-start-at-0
+                        threadMap.put(currNumber, currentThread.getId());
+                    }
+                });
+            }
+
+            for (Runnable task : divisibilityTasks) {
+                Thread thread = new Thread(task);
+                thread.start();
+                threadList.add(thread);
             }
         }
+
+        // wait for all threads to finish
+        for (Thread thread : threadList) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        // after all tasks are done, print prime numbers
+        System.out.println("Found prime numbers: ");
+        for (int i = 1; i <= upperLimit; i++) {
+            if (primeMap.get(i)) {
+                System.out.print(i + " ");
+            }
+        }
+        
+        executor.shutdown();
+
+        System.out.println("\n\nENDED AT: " + getTimeNow());
     }
 
     /*
@@ -74,23 +134,40 @@ public class WaitLinear extends Thread {
                 if (parts.length == 2) {
                     try {
                         configValues.put(parts[0], Integer.parseInt(parts[1]));
+                    // NON-INTEGER PARAMETER
                     } catch (NumberFormatException e) {
                         System.err.println("Error in `config.txt`: '" + parts[1] + "' is not a valid integer.");
+                        System.exit(1); // exit if the condition not met
                     }
+                // NO PARAMETER
                 } else {
                     System.err.println("Error in `config.txt`: Missing '" + line + "'");
+                    System.exit(1); // exit if the condition not met
                 }
             }
+        // OTHER
         } catch (IOException e) {
             System.err.println("Error reading `config.txt`: " + e.getMessage());
+            System.exit(1); // exit if the condition not met
         }
 
-        // int x = configValues.get("x");
-        // int y = configValues.get("y");
-        
+        int x = configValues.get("x");
+        int y = configValues.get("y");
         // System.out.println("x = " + x);
         // System.out.println("y = " + y);
-    
+
+        // VALIDATION: x <= y
+        if (x > y) {
+            System.err.println("Error reading `config.txt`: Value of 'x' must be less than or equal to 'y'. \nx = " + x + ", y = " + y);
+            System.exit(1); // exit if the condition not met
+        }
+
+        // VALIDATION: x >= 1
+        if (x < 1) {
+            System.err.println("Error reading `config.txt`: Value of 'x' must be at least 1. \nx = " + x);
+            System.exit(1); // exit if the condition not met
+        }
+
         return configValues;
     }
 
@@ -100,34 +177,9 @@ public class WaitLinear extends Thread {
      * 
      */
     public static String getTimeNow() {
-        // get current time
-        LocalTime time = LocalTime.now();
-        // format time as string
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String strTime = time.format(formatter);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date now = new Date();
 
-        return strTime;
-    }
-
-    /*
-     * 
-     * Search functions
-     * 
-     */
-
-    
-    /*
-     * 
-     * Misc
-     * 
-     */
-    static class Prime {
-        Boolean isPrime; // tracks if number is prime
-        int maxDivisibility; // tracks the max divisor (square root of the number)
-
-        Prime(Boolean isPrime, int maxDivisibility) {
-            this.isPrime = isPrime;
-            this.maxDivisibility = maxDivisibility;
-        }
+        return formatter.format(now);
     }
 }
