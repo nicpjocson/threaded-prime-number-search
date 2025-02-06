@@ -1,3 +1,6 @@
+/*
+ * Threaded Prime Number Search Program
+ */
 // config-related
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -90,15 +93,18 @@ public class WaitStraight extends Thread {
                     // NON-INTEGER PARAMETER
                     } catch (NumberFormatException e) {
                         System.err.println("Error in `config.txt`: '" + parts[1] + "' is not a valid integer.");
+                        System.exit(1); // exit if the condition not met
                     }
                 // NO PARAMETER
                 } else {
                     System.err.println("Error in `config.txt`: Missing '" + line + "'");
+                    System.exit(1); // exit if the condition not met
                 }
             }
         // OTHER
         } catch (IOException e) {
             System.err.println("Error reading `config.txt`: " + e.getMessage());
+            System.exit(1); // exit if the condition not met
         }
 
         int x = configValues.get("x");
@@ -108,13 +114,13 @@ public class WaitStraight extends Thread {
 
         // VALIDATION: x < y
         if (x >= y) {
-            System.err.println("Error reading `config.txt`: Value of 'x' must be less than or equal to 'y'. x = " + x + ", y = " + y);
+            System.err.println("Error reading `config.txt`: Value of 'x' must be less than or equal to 'y'. \nx = " + x + ", y = " + y);
             System.exit(1); // exit if the condition not met
         }
 
         // VALIDATION: x >= 1
         if (x < 1) {
-            System.err.println("Error reading `config.txt`: Value of 'x' must be at least 1. x = " + x);
+            System.err.println("Error reading `config.txt`: Value of 'x' must be at least 1. \nx = " + x);
             System.exit(1); // exit if the condition not met
         }
 
