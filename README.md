@@ -26,7 +26,7 @@ Inside each folder is its corresponding (1) `Main.java` program, (2) `config.txt
 ## Compilation instructions  
 ### Command-line interface  
 1. Open command-line interface.  
-2. Type `cd "<path\to\folder>" && javac Main.java && java Main`.  
+2. Type `cd "<path\to\program\variation\folder>" && javac Main.java && java Main`.  
 
 ### Visual Studio Code  
 1. Open the `threaded-prime-number-search` program folder in VSC.  
