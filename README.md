@@ -1,6 +1,6 @@
 # Threaded Prime Number Search  
 Java program in partial fulfillment of the requirements for the course STDISCM.  
-Last modified: 4 February 2025 by Nicole Jocson  
+Last modified: 6 February 2025 by Nicole Jocson  
 
 ### Printing Schemes  
 `immediate` - Prints the prime numbers immediately, with the thread ID (i.e., what thread found it) and timestamp.  
