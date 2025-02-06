@@ -86,8 +86,8 @@ public class ImmediateStraight extends Thread {
         // System.out.println("x = " + x);
         // System.out.println("y = " + y);
 
-        // VALIDATION: x < y
-        if (x >= y) {
+        // VALIDATION: x <= y
+        if (x > y) {
             System.err.println("Error reading `config.txt`: Value of 'x' must be less than or equal to 'y'. \nx = " + x + ", y = " + y);
             System.exit(1); // exit if the condition not met
         }
