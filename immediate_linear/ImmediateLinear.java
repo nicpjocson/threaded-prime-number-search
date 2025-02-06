@@ -91,21 +91,18 @@ public class ImmediateLinear extends Thread {
                     // NON-INTEGER PARAMETER
                     } catch (NumberFormatException e) {
                         System.err.println("Error in `config.txt`: '" + parts[1] + "' is not a valid integer.");
+                        System.exit(1); // exit if the condition not met
                     }
                 // NO PARAMETER
                 } else {
                     System.err.println("Error in `config.txt`: Missing '" + line + "'");
+                    System.exit(1); // exit if the condition not met
                 }
             }
         // OTHER
         } catch (IOException e) {
             System.err.println("Error reading `config.txt`: " + e.getMessage());
-        }
-
-        // INPUT VALIDATION
-        if (!configValues.containsKey("x") || !configValues.containsKey("y")) {
-            System.err.println("Error: `config.txt` must define both 'x' and 'y' values.");
-            System.exit(1); // exit the program if x or y is missing
+            System.exit(1); // exit if the condition not met
         }
 
         int x = configValues.get("x");
@@ -113,15 +110,15 @@ public class ImmediateLinear extends Thread {
         // System.out.println("x = " + x);
         // System.out.println("y = " + y);
 
-        // VALIDATION: x < y
-        if (x >= y) {
-            System.err.println("Error reading `config.txt`: Value of 'x' must be less than or equal to 'y'. x = " + x + ", y = " + y);
+        // VALIDATION: x <= y
+        if (x > y) {
+            System.err.println("Error reading `config.txt`: Value of 'x' must be less than or equal to 'y'. \nx = " + x + ", y = " + y);
             System.exit(1); // exit if the condition not met
         }
 
         // VALIDATION: x >= 1
         if (x < 1) {
-            System.err.println("Error reading `config.txt`: Value of 'x' must be at least 1. x = " + x);
+            System.err.println("Error reading `config.txt`: Value of 'x' must be at least 1. \nx = " + x);
             System.exit(1); // exit if the condition not met
         }
 
