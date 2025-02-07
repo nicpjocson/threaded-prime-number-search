@@ -26,6 +26,11 @@ public class ImmediateStraight extends Thread {
         // equally divide the numbers into the threads
         int rangeSize = upperLimit / numThreads;
 
+        printProgramHeader();
+        System.out.println("STARTED AT: " + getTimeNow());
+        System.out.println("ENDED AT: " + getTimeNow());
+        System.out.println("=================================================================");
+
         for (int i = 0; i < numThreads; i++) {
             int threadId = i; // for readability
             // current partition min
@@ -107,10 +112,21 @@ public class ImmediateStraight extends Thread {
      * 
      */
     public static String getTimeNow() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date now = new Date();
 
-        return formatter.format(now);
+        long millis = now.getTime() % 1000;
+        long nanos = System.nanoTime() % 1_000_000_000;
+
+        return formatter.format(now) + String.format(".%03d%06d", millis, nanos);
+    }
+
+    public static void printProgramHeader() {
+        System.out.println("=================================================================\n");
+        System.out.println("Threaded Prime Number Search");
+        System.out.println("Prints primes immediately, using straight task division.");
+        System.out.println("Last modified: 7 February 2025 by Nicole Jocson S14\n");
+        System.out.println("=================================================================");
     }
 
     /*
