@@ -28,7 +28,6 @@ public class ImmediateStraight extends Thread {
 
         printProgramHeader();
         System.out.println("STARTED AT: " + getTimeNow());
-        System.out.println("ENDED AT: " + getTimeNow());
         System.out.println("=================================================================");
 
         for (int i = 0; i < numThreads; i++) {
@@ -51,6 +50,18 @@ public class ImmediateStraight extends Thread {
             });
             threads[i].start();
         }
+
+        for (int i = 0; i < numThreads; i++) {
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }   
+
+        System.out.println("=================================================================");
+        System.out.println("ENDED AT: " + getTimeNow());
+        System.out.println("=================================================================");
     }
 
     /*
