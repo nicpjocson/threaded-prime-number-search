@@ -117,7 +117,7 @@ public class WaitLinear extends Thread {
         
         executor.shutdown();
 
-        System.out.println("=================================================================");
+        System.out.println("\n=================================================================");
         System.out.println("ENDED AT: " + getTimeNow());
         System.out.println("=================================================================");
     }
